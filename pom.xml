@@ -6,7 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>4.0.6</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/> 
     </parent>
     <groupId>come.codewithus</groupId>
     <artifactId>habit-tracker</artifactId>
@@ -42,6 +42,11 @@
         </dependency>
     </dependencies>
 
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
     <build>
         <plugins>
             <plugin>
@@ -50,5 +55,11 @@
             </plugin>
         </plugins>
     </build>
+<packaging>pom</packaging>
+    <modules>
+        <module>java-CRUD-service</module>
+    </modules>
+<repositories>
+</repositories>
 
 </project>

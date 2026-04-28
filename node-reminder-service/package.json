@@ -1,0 +1,9 @@
+{
+  "name": "reminders-service",
+  "version": "1.0.0",
+  "description": "Reminders service for habit-tracker",
+  "main": "reminders-service.js",
+  "scripts": {
+    "start": "node reminders-service.js"
+  }
+}
