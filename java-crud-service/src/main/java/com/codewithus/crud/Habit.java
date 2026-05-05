@@ -1,4 +1,4 @@
-package come.codewithus.crud;
+package com.codewithus.crud;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

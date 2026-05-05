@@ -1,14 +1,11 @@
-package come.codewithus.habittracker;
+package com.codewithus.crud;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HabitTrackerApplication {
-
+public class HabitCrudMain {
     public static void main(String[] args) {
-
-        SpringApplication.run(HabitTrackerApplication.class, args);
+        SpringApplication.run(HabitCrudMain.class, args);
     }
-
 }

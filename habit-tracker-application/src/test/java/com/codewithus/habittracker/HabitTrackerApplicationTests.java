@@ -1,4 +1,4 @@
-package come.codewithus.habittracker;
+package com.codewithus.habittracker;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
