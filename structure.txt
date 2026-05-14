@@ -1,0 +1,33 @@
+Habit Tracker — Project Structure
+
+habit-tracker/
+├── frontend/                        # React + TypeScript (Vite)
+│   └── src/
+│       ├── App.tsx                  # Router: /habits, /reminders
+│       ├── api.ts                   # Base URLs + shared types
+│       ├── pages/
+│       │   ├── Habits.tsx           # Habits CRUD UI
+│       │   └── Reminders.tsx        # Reminders list UI
+│       └── styles.css
+│
+├── java-crud-service/               # Spring Boot (port 8081)
+│   └── src/main/java/com/codewithus/crud/
+│       ├── Habit.java               # JPA entity: id, name, description
+│       ├── HabitController.java     # REST: GET/POST/PUT/DELETE /api/habits
+│       ├── HabitService.java        # Business logic layer
+│       ├── HabitCrudRepository.java # Spring Data JPA repo
+│       └── HabitCrudMain.java       # App entry point
+│   └── resources/application.properties  # H2 in-memory DB, port 8081
+│
+├── node-reminder-service/           # Node.js (port 3000)
+│   └── reminders-service.js         # GET /reminders — hardcoded list
+│
+├── habit-tracker-application/       # Stub / placeholder Spring Boot app
+└── pom.xml                          # Root Maven POM
+
+Architecture summary:
+- 3 services: React frontend, Spring Boot CRUD service (H2 in-memory), Node.js reminder service
+- Java service has a full REST API for habits (create, read, update, delete) backed by H2
+- Node service currently just returns a hardcoded list of reminders — no persistence
+- Frontend talks directly to both backend services (no API gateway)
+- The habit-tracker-application/ folder looks like an early placeholder — only has an entry point and empty test
