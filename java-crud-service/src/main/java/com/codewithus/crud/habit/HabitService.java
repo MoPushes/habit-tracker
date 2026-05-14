@@ -1,4 +1,4 @@
-package com.codewithus.crud;
+package com.codewithus.crud.habit;
 
 import org.springframework.stereotype.Service;
 

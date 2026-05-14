@@ -1,4 +1,4 @@
-package com.codewithus.crud;
+package com.codewithus.crud.habit;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
