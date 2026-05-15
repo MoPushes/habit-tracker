@@ -1,0 +1,244 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap');
+
+.reg-root {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  font-family: 'Geist', system-ui, sans-serif;
+}
+
+/* ── Left panel ── */
+.reg-left {
+  background: #0f0f0f;
+  color: #fff;
+  padding: 56px 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.reg-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.reg-logo {
+  width: 34px;
+  height: 34px;
+  background: #fff;
+  color: #0f0f0f;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-family: 'Geist Mono', monospace;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.reg-pitch {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 0 40px;
+}
+
+.reg-pitch h1 {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin: 0 0 20px;
+}
+
+.reg-pitch p {
+  font-size: 17px;
+  line-height: 1.6;
+  color: #a1a1aa;
+  max-width: 32ch;
+  margin: 0;
+}
+
+.reg-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reg-features li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  color: #d4d4d8;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.reg-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  flex-shrink: 0;
+  color: #a3e635;
+}
+
+/* ── Right panel ── */
+.reg-right {
+  background: #fafafa;
+  display: grid;
+  place-items: center;
+  padding: 40px 32px;
+}
+
+.reg-card {
+  width: 100%;
+  max-width: 400px;
+}
+
+.reg-card-header {
+  margin-bottom: 32px;
+}
+
+.reg-card-header h2 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #0f0f0f;
+  margin: 0 0 6px;
+}
+
+.reg-card-header p {
+  font-size: 14px;
+  color: #71717a;
+  margin: 0;
+}
+
+.reg-card-header a {
+  color: #0f0f0f;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── Form ── */
+.reg-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.reg-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reg-field label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #3f3f46;
+}
+
+.reg-field input {
+  appearance: none;
+  font: inherit;
+  font-size: 15px;
+  padding: 11px 14px;
+  border: 1.5px solid #e4e4e7;
+  border-radius: 8px;
+  background: #fff;
+  color: #0f0f0f;
+  transition: border-color 150ms, box-shadow 150ms;
+  outline: none;
+}
+
+.reg-field input::placeholder {
+  color: #a1a1aa;
+}
+
+.reg-field input:focus {
+  border-color: #0f0f0f;
+  box-shadow: 0 0 0 3px rgba(15, 15, 15, 0.08);
+}
+
+.reg-error {
+  font-size: 13px;
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.reg-btn {
+  appearance: none;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px;
+  background: #0f0f0f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 150ms, transform 150ms;
+  margin-top: 4px;
+}
+
+.reg-btn:hover:not(:disabled) {
+  background: #1a1a1a;
+  transform: translateY(-1px);
+}
+
+.reg-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reg-terms {
+  margin: 16px 0 0;
+  font-size: 12px;
+  color: #a1a1aa;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.reg-terms a {
+  color: #71717a;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 720px) {
+  .reg-root {
+    grid-template-columns: 1fr;
+  }
+  .reg-left {
+    padding: 36px 28px;
+    min-height: auto;
+  }
+  .reg-pitch h1 {
+    font-size: 36px;
+  }
+  .reg-pitch {
+    padding: 36px 0 28px;
+  }
+  .reg-right {
+    padding: 36px 24px;
+  }
+}
