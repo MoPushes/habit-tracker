@@ -44,7 +44,8 @@ export default function App() {
         {/* Full-bleed auth routes — no nav, no max-width wrapper */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-
+        <Route path="/habits" element={<HabitsPage />} />
+        <Route path="/reminders" element={<RemindersPage />} />
         {/* App shell — nav + 720px container */}
         <Route element={<AppShell />}>
           <Route index element={<Navigate to="/habits" replace />} />
