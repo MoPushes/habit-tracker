@@ -13,6 +13,8 @@ public class Habit {
     private String name;
     private String description;
 
+    private boolean isBadHabit;
+
     // Getters and setters
     public Long getId() {
         return id;
@@ -36,4 +38,8 @@ public class Habit {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public boolean isBadHabit() { return isBadHabit; }
+
+    public void setBadHabit(boolean isBadHabit) { this.isBadHabit = isBadHabit; }
 }
