@@ -1,19 +1,21 @@
 package com.codewithus.crud.habit;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(
+        name = "habit",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"userId", "name"})}
+)
 public class Habit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long userId;
     private String name;
     private String description;
 
-    private boolean isBadHabit;
+    private String type;
 
     // Getters and setters
     public Long getId() {
@@ -23,6 +25,11 @@ public class Habit {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Long getUserId() { return userId; }
+
+    public void setUserId(Long userId) { this.userId = userId; }
+
     public String getName() {
         return name;
     }
@@ -39,7 +46,7 @@ public class Habit {
         this.description = description;
     }
 
-    public boolean isBadHabit() { return isBadHabit; }
+    public String getType() { return type; }
 
-    public void setBadHabit(boolean isBadHabit) { this.isBadHabit = isBadHabit; }
+    public void setType(String type) { this.type = type; }
 }
