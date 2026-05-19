@@ -17,3 +17,8 @@ Usage:
 
 Tech Stack:
 This project is in early development.
+
+Group names:
+Mohammed Al Ali
+Bilgehan Sertkaya
+Paulina Wiegel
