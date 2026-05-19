@@ -1,5 +1,5 @@
 export const JAVA_API = 'http://localhost:8081';
-export const NODE_API = 'http://localhost:3000';
+
 
 export type Habit = {
   id: number;
@@ -8,9 +8,17 @@ export type Habit = {
 };
 
 export type Reminder = {
-  id: number;
+   id: number;
+  userId: string;
   text: string;
+  time: string;       // "HH:MM"
+  type: 'good' | 'bad'; // CRITICAL: Must include type
+  description?: string; // Optional, but must be defined
+  active: boolean;
+  createdAt: Date | string;
+  updatedAt?: Date | string;
 };
+export const NODE_API = import.meta.env.VITE_NODE_API || 'http://localhost:3001';
 
 export type AuthResponse = {
   userId: number;
