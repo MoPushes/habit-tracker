@@ -5,6 +5,14 @@ export type Habit = {
   id: number;
   name: string;
   description: string;
+  type: 'build' | 'bad';
+};
+
+export type HabitProgress = {
+  completionRate: number;
+  currentStreak: number;
+  longestStreak: number;
+  sevenDayTrend: number[];
 };
 
 export type Reminder = {
