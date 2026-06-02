@@ -3,10 +3,7 @@ package com.codewithus.crud.habit;
 import jakarta.persistence.*;
 
 @Entity
-@Table(
-        name = "habit",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"userId", "name"})}
-)
+@Table(name = "habit", uniqueConstraints = { @UniqueConstraint(columnNames = { "userId", "name" }) })
 public class Habit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +23,13 @@ public class Habit {
         this.id = id;
     }
 
-    public Long getUserId() { return userId; }
+    public Long getUserId() {
+        return userId;
+    }
 
-    public void setUserId(Long userId) { this.userId = userId; }
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public String getName() {
         return name;
@@ -46,7 +47,11 @@ public class Habit {
         this.description = description;
     }
 
-    public String getType() { return type; }
+    public String getType() {
+        return type;
+    }
 
-    public void setType(String type) { this.type = type; }
+    public void setType(String type) {
+        this.type = type;
+    }
 }
