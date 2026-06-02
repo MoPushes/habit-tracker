@@ -1,6 +1,7 @@
 // Reminders.tsx
 import { useEffect, useRef, useState } from 'react';
-import { NODE_API, type Reminder } from '../api';
+import { NODE_API, authFetch, type Reminder } from '../api';
+
 
 interface NotificationMessage {
   type: 'NOTIFICATION';
@@ -104,7 +105,7 @@ useEffect(() => {
 }, []);
   // Fetch reminders on mount
   useEffect(() => {
-    fetch(`${NODE_API}/reminders`)
+    authFetch(`${NODE_API}/reminders`) // ✅ Uses authFetch (adds token)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
@@ -119,11 +120,10 @@ useEffect(() => {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${NODE_API}/reminders`, {
+      const res = await authFetch(`${NODE_API}/reminders`, { // ✅ Uses authFetch
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: 'user1',
+          // ❌ REMOVE userId: 'user1' here!
           text: newName,
           time: newTime,
           type: newType,
@@ -146,18 +146,18 @@ useEffect(() => {
 
   // Delete reminder handler
   const deleteReminder = async (id: number) => {
-    try {
-      const res = await fetch(`${NODE_API}/reminders/${id}`, {
-        method: 'DELETE',
-      });
+  try {
+    const res = await authFetch(`${NODE_API}/reminders/${id}`, {
+      method: 'DELETE',
+    });
 
-      if (!res.ok) throw new Error('Failed to delete');
+    if (!res.ok) throw new Error('Failed to delete');
 
-      setReminders(reminders.filter((r) => r.id !== id));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
-    }
-  };
+    setReminders(reminders.filter((r) => r.id !== id));
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Unknown error');
+  }
+};
 
   // Start edit
   const startEdit = (reminder: Reminder) => {
@@ -169,28 +169,27 @@ useEffect(() => {
   };
 
   // Save edit
-  const saveEdit = async (id: number) => {
-    try {
-      const res = await fetch(`${NODE_API}/reminders/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text: editName,
-          description: editDesc,
-          time: editTime,
-          type: editType,
-        }),
-      });
+const saveEdit = async (id: number) => {
+  try {
+    const res = await authFetch(`${NODE_API}/reminders/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        text: editName,
+        description: editDesc,
+        time: editTime,
+        type: editType,
+      }),
+    });
 
-      if (!res.ok) throw new Error('Failed to update reminder');
+    if (!res.ok) throw new Error('Failed to update reminder');
 
-      const updated = await res.json();
-      setReminders(reminders.map((r) => (r.id === id ? updated : r)));
-      setEditingId(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
-    }
-  };
+    const updated = await res.json();
+    setReminders(reminders.map((r) => (r.id === id ? updated : r)));
+    setEditingId(null);
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Unknown error');
+  }
+};
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="error">Error: {error}</p>;
@@ -211,8 +210,6 @@ useEffect(() => {
     🔔 Enable Notifications
   </button>
 )}
-      <p className="muted">From the Node service on :3001</p>
-
       {/* Notifications Panel */}
       {notifications.length > 0 && (
         <div className="notifications-panel">

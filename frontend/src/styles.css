@@ -223,3 +223,94 @@ li {
   border-color: #0d6efd;
   box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.2);
 }
+
+.unified-form {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.unified-form h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.reminder-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 5px;
+  border: 1px solid #dee2e6;
+}
+
+.reminder-options input,
+.reminder-options select {
+  width: 100%;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.reminder-options input:focus,
+.reminder-options select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.2);
+}
+
+.two-column-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.badge.good {
+  background: #d1e7dd;
+  color: #0f5132;
+}
+
+.badge.bad {
+  background: #f8d7da;
+  color: #842029;
+}
+
+.text-red { color: #b02a37; }
+.text-green { color: #0f5132; }
+
+@media (max-width: 768px) {
+  .two-column-grid {
+    grid-template-columns: 1fr;
+  }
+}
