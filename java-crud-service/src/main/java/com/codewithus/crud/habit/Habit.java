@@ -14,6 +14,13 @@ public class Habit {
 
     private String type;
 
+    private String reminderTime;
+
+    private Long reminderId;
+
+    @Embedded
+    private HabitReminder reminder;
+
     // Getters and setters
     public Long getId() {
         return id;
@@ -51,7 +58,17 @@ public class Habit {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+    public void setType(String type) { this.type = type; }
+
+    public String getReminderTime() { return reminderTime; }
+
+    public void setReminderTime(String reminderTime) { this.reminderTime = reminderTime; }
+
+    public Long getReminderId() { return reminderId; }
+
+    public void setReminderId(Long reminderId) { this.reminderId = reminderId; }
+
+    public HabitReminder getReminder() { return reminder; }
+
+    public void setReminder(HabitReminder reminder) { this.reminder = reminder; }
 }

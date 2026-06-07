@@ -102,6 +102,10 @@ export default function Register({ onSubmit, error }: Props) {
             <button className="reg-btn" type="submit" disabled={loading}>
               {loading ? 'Creating account…' : 'Create account'}
             </button>
+
+            <Link to="/login" className="reg-login-btn">
+              Already have an account? Log in
+            </Link>
           </form>
 
         </div>

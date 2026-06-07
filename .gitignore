@@ -35,3 +35,7 @@ build/
 .DS_Store
 ### Claude session ###
 .claude/
+
+### Project docs ###
+*.docx
+GITHUB_ISSUES.md

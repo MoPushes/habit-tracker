@@ -1,33 +1,33 @@
-//api.ts
+import type { Reminder as HabitReminder } from './components/Reminder';
 
 export const JAVA_API = 'http://localhost:8081';
 
+// Re-export the per-habit reminder shape so callers can import it from the same place.
+export type { Reminder as HabitReminder } from './components/Reminder';
 
 export type Habit = {
   id: number;
   name: string;
   description: string;
-  type: 'build' | 'bad';
+  type?: string;
+  reminderTime?: string;
+  reminder?: HabitReminder | null;
 };
 
-export type HabitProgress = {
-  completionRate: number;
-  currentStreak: number;
-  longestStreak: number;
-  sevenDayTrend: number[];
-};
-
+// Legacy reminder shape returned by the Node reminder service (/reminders page).
+// Kept as-is so the existing read-only page keeps working.
 export type Reminder = {
-   id: number;
+  id: number;
   userId: string;
   text: string;
   time: string;       // "HH:MM"
-  type: 'good' | 'bad'; // CRITICAL: Must include type
-  description?: string; // Optional, but must be defined
+  type: 'good' | 'bad';
+  description?: string;
   active: boolean;
   createdAt: Date | string;
   updatedAt?: Date | string;
 };
+
 export const NODE_API = import.meta.env.VITE_NODE_API || 'http://localhost:3001';
 
 export type AuthResponse = {
@@ -68,4 +68,17 @@ export async function apiRegister(email: string, password: string): Promise<Auth
   const body = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
   return body;
+}
+
+/** Partial update for a habit. Supports updating only the reminder field. */
+export async function patchHabit(
+  id: number,
+  patch: Partial<Pick<Habit, 'name' | 'description' | 'type' | 'reminderTime' | 'reminder'>>
+): Promise<Habit | null> {
+  const res = await authFetch(`${JAVA_API}/api/habits/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(patch),
+  });
+  if (!res.ok) return null;
+  return res.json();
 }

@@ -1,0 +1,290 @@
+/* ============================================================
+   reminders.css — additions for the reminder-on-habit feature.
+   Layered on top of styles.css.
+   ============================================================ */
+
+/* ---------- Bell button on a habit row ---------- */
+.habit-bell {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 8px 0 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--text-subtle);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: background 120ms, color 120ms, border-color 120ms;
+}
+.habit-bell:hover {
+  background: var(--surface-2);
+  color: var(--text);
+  border-color: var(--border);
+}
+.habit-bell.is-set {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: transparent;
+}
+.habit-bell.is-set:hover { background: oklch(0.94 0.04 269); }
+.habit-bell svg { flex-shrink: 0; }
+.habit-bell-time { white-space: nowrap; }
+
+/* Only show empty bell on hover; chip is always visible */
+.habit .habit-bell:not(.is-set) {
+  opacity: 0;
+  transition: opacity 120ms ease, background 120ms, color 120ms;
+}
+.habit:hover .habit-bell:not(.is-set),
+.habit:focus-within .habit-bell:not(.is-set) { opacity: 1; }
+
+/* ---------- Popover ---------- */
+.rem-anchor { position: relative; display: inline-flex; }
+.rem-pop {
+  width: 304px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow:
+    0 12px 32px -8px rgba(24,24,27,0.18),
+    0 2px 4px rgba(24,24,27,0.06);
+  padding: 14px;
+  animation: rem-in 140ms ease-out;
+}
+@keyframes rem-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.rem-pop::before {
+  content: '';
+  position: absolute;
+  top: -5px; right: 14px;
+  width: 10px; height: 10px;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  transform: rotate(45deg);
+}
+
+.rem-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.rem-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.01em;
+}
+.rem-close {
+  appearance: none;
+  width: 22px; height: 22px;
+  border-radius: 5px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  display: grid; place-items: center;
+  cursor: pointer;
+}
+.rem-close:hover { background: var(--surface-2); color: var(--text); }
+
+/* ---------- Time field ---------- */
+.rem-time-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.rem-time-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+  min-width: 38px;
+}
+.rem-time {
+  appearance: none;
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+  padding: 8px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  letter-spacing: 0.01em;
+}
+.rem-time:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+/* ---------- Frequency segments ---------- */
+.rem-section-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 6px;
+  font-family: var(--font-mono);
+}
+.rem-segs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 3px;
+  background: var(--surface-2);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.rem-seg {
+  appearance: none;
+  height: 28px;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 120ms, color 120ms, box-shadow 120ms;
+}
+.rem-seg:hover { color: var(--text); }
+.rem-seg.is-active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 2px rgba(24,24,27,0.06), 0 0 0 1px var(--border);
+}
+
+/* ---------- Days of week ---------- */
+.rem-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 14px;
+}
+.rem-day {
+  appearance: none;
+  height: 30px;
+  border-radius: 7px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 120ms, color 120ms, border-color 120ms;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+.rem-day:hover { border-color: var(--accent); }
+.rem-day.is-on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+/* ---------- Popover actions ---------- */
+.rem-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.rem-actions-right { display: flex; gap: 6px; }
+
+/* ---------- Inline reminder block on add-habit form ---------- */
+.rem-inline {
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--surface-2);
+  border-radius: 8px;
+  border: 1px dashed var(--border-strong);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.rem-inline-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.rem-inline-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.rem-inline-title svg { color: var(--accent); }
+
+/* "+ Add reminder" button when nothing set */
+.rem-add {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 10px;
+  background: transparent;
+  border: 1px dashed var(--border-strong);
+  border-radius: 7px;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 120ms, color 120ms, background 120ms;
+  align-self: flex-start;
+}
+.rem-add:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-style: solid;
+}
+
+/* Chip showing current reminder in the form (when set) */
+.rem-set-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 6px 6px 6px 12px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.rem-set-chip-time { font-family: var(--font-mono); letter-spacing: 0.01em; }
+.rem-set-chip-sep  { opacity: 0.5; }
+.rem-set-chip-edit {
+  appearance: none;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  background: rgba(255,255,255,0.6);
+  border: none;
+  color: var(--accent);
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 120ms;
+}
+.rem-set-chip-edit:hover { background: rgba(255,255,255,0.95); }
