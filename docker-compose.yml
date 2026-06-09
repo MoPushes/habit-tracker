@@ -1,0 +1,28 @@
+services:
+  node-service:
+    build:
+      context: ./node-reminder-service
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
+
+  java-service:
+    build:
+      context: .
+      dockerfile: java-crud-service/Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - REMINDER_SERVICE_URL=http://node-service:3001
+    depends_on:
+      - node-service
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - java-service
+    restart: unless-stopped
