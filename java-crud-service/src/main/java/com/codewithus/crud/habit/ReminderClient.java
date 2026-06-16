@@ -15,6 +15,16 @@ public class ReminderClient {
         this.restClient = RestClient.create(reminderServiceUrl);
     }
 
+    private String mapJavaTypeToNodeType(String habitType) {
+        if (habitType == null) {
+            return "good";
+        }
+        if ("build".equalsIgnoreCase(habitType)) {
+            return "good";
+        }
+        return habitType;
+    }
+
     public Long createReminder(String habitName, String reminderTime, String habitType, Long userId) {
         try {
             Map<?, ?> response = restClient.post()
@@ -24,7 +34,7 @@ public class ReminderClient {
                     "userId", userId != null ? String.valueOf(userId) : "anonymous",
                     "text", habitName,
                     "time", reminderTime,
-                    "type", habitType != null ? habitType : "good"
+                        "type", mapJavaTypeToNodeType(habitType)
                 ))
                 .retrieve()
                 .body(Map.class);
@@ -47,7 +57,7 @@ public class ReminderClient {
                 .body(Map.of(
                     "text", habitName,
                     "time", reminderTime,
-                    "type", habitType != null ? habitType : "good"
+                        "type", mapJavaTypeToNodeType(habitType)
                 ))
                 .retrieve()
                 .toBodilessEntity();
