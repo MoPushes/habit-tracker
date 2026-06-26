@@ -7,16 +7,17 @@ const EMOJIS = ['⭐','🎯','💪','🏊','🚴','🎸','🌱','☕','🍎','�
 
 export default function AddModal({ onClose, onAdd }: {
   onClose: () => void;
-  onAdd: (data: { name: string; emoji: string; color: string; reminder: Reminder | null }) => void;
+  onAdd: (data: { name: string; emoji: string; color: string; reminder: Reminder | null; type: 'good' | 'bad' }) => void;
 }) {
   const [name, setName] = useState('');
   const [emoji, setEmoji] = useState('⭐');
   const [ci, setCi] = useState(0);
   const [reminder, setReminder] = useState<Reminder | null>(null);
+  const [type, setType] = useState<'good' | 'bad'>('good');
 
   const submit = () => {
     if (!name.trim()) return;
-    onAdd({ name: name.trim(), emoji, color: HABIT_COLORS[ci], reminder });
+    onAdd({ name: name.trim(), emoji, color: HABIT_COLORS[ci], reminder, type });
     onClose();
   };
 
@@ -48,6 +49,12 @@ export default function AddModal({ onClose, onAdd }: {
           {HABIT_COLORS.map((c, i) => (
             <button key={c} onClick={() => setCi(i)} style={{ width: 30, height: 30, borderRadius: '50%', background: c, border: 'none', cursor: 'pointer', outline: ci === i ? `3px solid ${c}` : 'none', outlineOffset: 2, transform: ci === i ? 'scale(1.18)' : 'scale(1)', transition: 'all .15s' }} />
           ))}
+        </div>
+
+        <label style={{ display: 'block', fontWeight: 700, fontSize: 12, color: 'var(--text2)', marginBottom: 9 }}>TYPE</label>
+        <div style={{ display: 'flex', gap: 10, marginBottom: 18 }}>
+          <button onClick={() => setType('good')} style={{ flex: 1, padding: '10px', borderRadius: 10, border: `1.5px solid ${type === 'good' ? 'var(--violet)' : 'var(--border)'}`, background: type === 'good' ? 'var(--bg4)' : 'var(--bg3)', cursor: 'pointer', fontWeight: 600, fontSize: 13, color: 'var(--text)' }}>Good ✅</button>
+          <button onClick={() => setType('bad')} style={{ flex: 1, padding: '10px', borderRadius: 10, border: `1.5px solid ${type === 'bad' ? 'var(--violet)' : 'var(--border)'}`, background: type === 'bad' ? 'var(--bg4)' : 'var(--bg3)', cursor: 'pointer', fontWeight: 600, fontSize: 13, color: 'var(--text)' }}>Bad ⚠️</button>
         </div>
 
         <InlineReminder value={reminder} onChange={setReminder} />

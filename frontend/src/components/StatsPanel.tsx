@@ -82,7 +82,7 @@ export default function StatsPanel({ habits, todayChecked }: {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <div style={{ background: `${habit.color}18`, border: `1.5px solid ${habit.color}44`, borderRadius: 14, padding: '10px 14px', textAlign: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 4, justifyContent: 'center' }}>
-                <span style={{ animation: 'fireWiggle 1.2s ease infinite', display: 'inline-block' }}>🔥</span>
+                <span>🔥</span>
                 <span style={{ fontWeight: 900, fontSize: 22, color: habit.color }}>{streak}</span>
               </div>
               <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--text2)' }}>day streak</div>

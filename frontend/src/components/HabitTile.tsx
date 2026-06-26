@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { DashHabit } from '../data';
+import { calcCleanStreak, type DashHabit } from '../data';
 import { HabitBell, summarizeFreq, type Reminder } from './Reminder';
 
 export default function HabitTile({ habit, checked, onToggle, onReminderChange, onReminderRemove, onEdit, onDelete }: {
@@ -18,6 +18,78 @@ export default function HabitTile({ habit, checked, onToggle, onReminderChange, 
     setTimeout(() => setBounce(false), 400);
     onToggle(habit.id);
   };
+
+  if (habit.type === 'bad') {
+    const slipped = checked;
+    const streak = calcCleanStreak(habit, slipped);
+    return (
+      <div style={{
+        display: 'flex', flexDirection: 'column',
+        background: slipped ? 'rgba(239,68,68,0.08)' : 'var(--bg3)',
+        border: `1.5px solid ${slipped ? '#ef444455' : 'rgba(239,68,68,0.3)'}`,
+        borderRadius: 16, transition: 'all .2s', userSelect: 'none', overflow: 'hidden',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px' }}>
+          <div style={{
+            width: 38, height: 38, borderRadius: 12, flexShrink: 0,
+            background: slipped ? 'rgba(239,68,68,0.15)' : 'var(--bg4)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20,
+          }}>
+            {habit.emoji}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontWeight: 700, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {habit.name}
+            </div>
+            <div style={{ fontSize: 11, fontWeight: 600, marginTop: 1, color: slipped ? '#ef4444' : 'var(--text2)' }}>
+              {slipped ? 'Slipped today' : `${streak}d clean`}
+            </div>
+          </div>
+          <button
+            onClick={handleToggle}
+            style={{
+              padding: '5px 11px', borderRadius: 8, cursor: 'pointer',
+              fontFamily: 'Poppins', fontWeight: 700, fontSize: 11,
+              border: '1.5px solid rgba(239,68,68,0.45)',
+              background: slipped ? 'rgba(239,68,68,0.12)' : 'transparent',
+              color: '#ef4444', transition: 'all .15s', flexShrink: 0,
+            }}
+          >
+            {slipped ? 'Undo' : 'Slipped'}
+          </button>
+        </div>
+        <div
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '6px 10px 8px',
+            borderTop: `1px solid ${slipped ? 'rgba(239,68,68,0.15)' : 'var(--border)'}`,
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--text2)' }}>
+            <HabitBell
+              reminder={habit.reminder ?? null}
+              onChange={(r) => onReminderChange(habit.id, r)}
+              onRemove={() => onReminderRemove(habit.id)}
+            />
+            {habit.reminder && (
+              <span style={{ fontSize: 11, color: 'var(--text2)', fontWeight: 500 }}>
+                {summarizeFreq(habit.reminder)}
+              </span>
+            )}
+          </div>
+          <div style={{ display: 'flex', gap: 2 }}>
+            <ActionBtn title="Edit" color="var(--violet)" hoverBg="rgba(124,58,237,.1)" onClick={() => onEdit(habit.id)}>
+              <svg width={13} height={13} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round"><path d="M11.5 2.5l2 2L5 13l-2.5.5L3 11l8.5-8.5z"/></svg>
+            </ActionBtn>
+            <ActionBtn title="Delete" color="#ef4444" hoverBg="rgba(239,68,68,.1)" onClick={() => onDelete(habit.id)}>
+              <svg width={13} height={13} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round"><path d="M3 4h10M6 4V2.5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1V4M4.5 4l.5 9a1 1 0 0 0 1 .9h4a1 1 0 0 0 1-.9l.5-9"/></svg>
+            </ActionBtn>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{

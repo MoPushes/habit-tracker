@@ -1,4 +1,21 @@
 services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: habitdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
   node-service:
     build:
       context: ./node-reminder-service
@@ -13,9 +30,15 @@ services:
     ports:
       - "8081:8081"
     environment:
+      - DB_URL=jdbc:postgresql://postgres:5432/habitdb
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
       - REMINDER_SERVICE_URL=http://node-service:3001
     depends_on:
-      - node-service
+      postgres:
+        condition: service_healthy
+      node-service:
+        condition: service_started
     restart: unless-stopped
 
   frontend:
@@ -26,3 +49,6 @@ services:
     depends_on:
       - java-service
     restart: unless-stopped
+
+volumes:
+  postgres_data:

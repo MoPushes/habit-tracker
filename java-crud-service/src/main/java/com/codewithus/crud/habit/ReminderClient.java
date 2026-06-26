@@ -25,23 +25,24 @@ public class ReminderClient {
         return habitType;
     }
 
+    @SuppressWarnings("unchecked")
     public Long createReminder(String habitName, String reminderTime, String habitType, Long userId) {
         try {
-            Map<?, ?> response = restClient.post()
+            Map<String, Object> response = (Map<String, Object>) restClient.post()
                 .uri("/reminders")
                 .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
                 .body(Map.of(
                     "userId", userId != null ? String.valueOf(userId) : "anonymous",
                     "text", habitName,
                     "time", reminderTime,
-                        "type", mapJavaTypeToNodeType(habitType)
+                    "type", mapJavaTypeToNodeType(habitType)
                 ))
                 .retrieve()
                 .body(Map.class);
 
             if (response != null && response.containsKey("id")) {
                 Object id = response.get("id");
-                return id instanceof Number ? ((Number) id).longValue() : null;
+                return id instanceof Number n ? n.longValue() : null;
             }
         } catch (Exception e) {
             System.err.println("[ReminderClient] Service unavailable: " + e.getMessage());
@@ -57,7 +58,7 @@ public class ReminderClient {
                 .body(Map.of(
                     "text", habitName,
                     "time", reminderTime,
-                        "type", mapJavaTypeToNodeType(habitType)
+                    "type", mapJavaTypeToNodeType(habitType)
                 ))
                 .retrieve()
                 .toBodilessEntity();

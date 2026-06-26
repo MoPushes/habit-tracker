@@ -16,6 +16,8 @@ export type DashHabit = {
   emoji: string;
   color: string;
   reminder?: Reminder | null;
+  type: 'good' | 'bad';
+  createdDate?: string; // 'YYYY-MM-DD' — used to cap bad-habit clean streaks
   /** completions['YYYY-M'][day] = true */
   completions: Record<string, Record<number, boolean>>;
 };
@@ -41,23 +43,45 @@ export function genComp(id: number, y: number, m: number): Record<number, boolea
 }
 
 /** Current consecutive-day streak for a habit counting back from TODAY.
- *  If today is not yet checked, we start counting from yesterday so an
- *  existing streak is not zeroed out mid-day. */
+ *  For good habits: counts days done. For bad habits: counts clean days (no slip). */
 export function calcStreak(h: DashHabit, todayChecked: TodayChecked): number {
+  if (h.type === 'bad') {
+    return calcCleanStreak(h, !!todayChecked[h.id]);
+  }
+
   let s = 0;
   const dt = new Date(TODAY);
-
-  // If today isn't checked, skip it and start from yesterday.
   if (!todayChecked[h.id]) {
     dt.setDate(dt.getDate() - 1);
   }
-
   while (s < 365) {
     const isT = dt.toDateString() === TODAY.toDateString();
     const k = `${dt.getFullYear()}-${dt.getMonth()}`;
     const d = dt.getDate();
     const done = isT ? todayChecked[h.id] : h.completions?.[k]?.[d];
     if (!done) break;
+    s++;
+    dt.setDate(dt.getDate() - 1);
+  }
+  return s;
+}
+
+/** Clean streak for a bad habit: consecutive days with no slip, capped at createdDate. */
+export function calcCleanStreak(h: DashHabit, slippedToday: boolean): number {
+  const created = h.createdDate ? new Date(h.createdDate) : null;
+  let s = 0;
+  const dt = new Date(TODAY);
+  while (s < 365) {
+    if (created) {
+      const cur = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
+      const cap = new Date(created.getFullYear(), created.getMonth(), created.getDate());
+      if (cur < cap) break;
+    }
+    const isT = dt.toDateString() === TODAY.toDateString();
+    const k = `${dt.getFullYear()}-${dt.getMonth()}`;
+    const d = dt.getDate();
+    const slipped = isT ? slippedToday : h.completions?.[k]?.[d];
+    if (slipped) break;
     s++;
     dt.setDate(dt.getDate() - 1);
   }
@@ -76,7 +100,7 @@ if (!localStorage.getItem('hf_cleared_v1')) {
   localStorage.setItem('hf_cleared_v1', '1');
 }
 
-type MetaMap = Record<number, { emoji: string; color: string }>;
+type MetaMap = Record<number, { emoji: string; color: string; createdDate?: string }>;
 type CompMap = Record<number, Record<string, Record<number, boolean>>>;
 
 function readMeta(): MetaMap {
@@ -111,20 +135,20 @@ export function saveTodayChecked(checked: TodayChecked) {
 
 /** Enrich API habits with stored emoji/color/completions. */
 export function enrichHabits(
-  apiHabits: Array<{ id: number; name: string; description?: string; reminder?: Reminder | null }>,
+  apiHabits: Array<{ id: number; name: string; description?: string; type: string;  reminder?: Reminder | null }>,
 ): DashHabit[] {
   const meta = readMeta();
   const comp = readComp();
   return apiHabits.map((h, i) => {
     const m = meta[h.id] ?? { emoji: '⭐', color: HABIT_COLORS[i % HABIT_COLORS.length] };
-    return { ...h, emoji: m.emoji, color: m.color, completions: comp[h.id] ?? {} };
+    return { ...h, emoji: m.emoji, color: m.color, completions: comp[h.id] ?? {}, type: (h.type as 'good' | 'bad') ?? 'good', createdDate: m.createdDate };
   });
 }
 
-/** Persist emoji + color for a habit id. */
-export function saveHabitMeta(id: number, emoji: string, color: string) {
+/** Persist emoji + color for a habit id. Pass createdDate only on first creation. */
+export function saveHabitMeta(id: number, emoji: string, color: string, createdDate?: string) {
   const meta = readMeta();
-  meta[id] = { emoji, color };
+  meta[id] = { emoji, color, createdDate: createdDate ?? meta[id]?.createdDate };
   writeMeta(meta);
 }
 

@@ -8,7 +8,7 @@ const EMOJIS = ['⭐','🎯','💪','🏊','🚴','🎸','🌱','☕','🍎','�
 export default function EditModal({ habit, onClose, onSave }: {
   habit: DashHabit;
   onClose: () => void;
-  onSave: (data: { name: string; description: string; emoji: string; color: string }) => void;
+  onSave: (data: { name: string; description: string; emoji: string; color: string; type: 'good' | 'bad' }) => void;
 }) {
   const [name, setName] = useState(habit.name);
   const [description, setDescription] = useState(habit.description ?? '');
@@ -16,10 +16,11 @@ export default function EditModal({ habit, onClose, onSave }: {
   const [ci, setCi] = useState(
     Math.max(0, HABIT_COLORS.indexOf(habit.color))
   );
+  const [type, setType] = useState<'good' | 'bad'>(habit.type ?? 'good');
 
   const submit = () => {
     if (!name.trim()) return;
-    onSave({ name: name.trim(), description, emoji, color: HABIT_COLORS[ci] });
+    onSave({ name: name.trim(), description, emoji, color: HABIT_COLORS[ci], type });
     onClose();
   };
 
@@ -67,6 +68,12 @@ export default function EditModal({ habit, onClose, onSave }: {
           {HABIT_COLORS.map((c, i) => (
             <button key={c} onClick={() => setCi(i)} style={{ width: 30, height: 30, borderRadius: '50%', background: c, border: 'none', cursor: 'pointer', outline: ci === i ? `3px solid ${c}` : 'none', outlineOffset: 2, transform: ci === i ? 'scale(1.18)' : 'scale(1)', transition: 'all .15s' }} />
           ))}
+        </div>
+
+        <label style={{ display: 'block', fontWeight: 700, fontSize: 12, color: 'var(--text2)', marginBottom: 9 }}>TYPE</label>
+        <div style={{ display: 'flex', gap: 10, marginBottom: 22 }}>
+          <button onClick={() => setType('good')} style={{ flex: 1, padding: '10px', borderRadius: 10, border: `1.5px solid ${type === 'good' ? 'var(--violet)' : 'var(--border)'}`, background: type === 'good' ? 'var(--bg4)' : 'var(--bg3)', cursor: 'pointer', fontWeight: 600, fontSize: 13, color: 'var(--text)' }}>Good ✅</button>
+          <button onClick={() => setType('bad')} style={{ flex: 1, padding: '10px', borderRadius: 10, border: `1.5px solid ${type === 'bad' ? 'var(--violet)' : 'var(--border)'}`, background: type === 'bad' ? 'var(--bg4)' : 'var(--bg3)', cursor: 'pointer', fontWeight: 600, fontSize: 13, color: 'var(--text)' }}>Bad ⚠️</button>
         </div>
 
         <button onClick={submit} className="btn-grad" style={{ width: '100%', justifyContent: 'center', borderRadius: 14, padding: '14px', fontSize: 15 }}>

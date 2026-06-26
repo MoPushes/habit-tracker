@@ -27,7 +27,7 @@ export default function Sidebar({ habits, todayChecked, onAdd }: {
       </div>
 
       <div className="card" style={{ padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 12 }}>
-        <span style={{ fontSize: 28, animation: 'fireWiggle 1.5s ease infinite', display: 'inline-block' }}>🔥</span>
+        <span style={{ fontSize: 28 }}>🔥</span>
         <div>
           <div style={{ fontWeight: 900, fontSize: 22, color: 'var(--violet)' }}>{totalStreak}d</div>
           <div style={{ fontSize: 11, color: 'var(--text2)', fontWeight: 600 }}>combined streak</div>

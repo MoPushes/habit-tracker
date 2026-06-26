@@ -40,7 +40,7 @@ export default function HabitsPage({ dark, onToggleDark }: {
     try {
       const res = await authFetch(`${JAVA_API}/api/habits`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const raw: Array<{ id: number; name: string; description?: string }> = await res.json();
+      const raw: Array<{ id: number; name: string; description?: string; type: string }> = await res.json();
       setHabits(enrichHabits(raw));
       setError(null);
     } catch (err: unknown) {
@@ -64,11 +64,11 @@ export default function HabitsPage({ dark, onToggleDark }: {
     setHabits((hs) => hs.filter((h) => h.id !== id));
   }
 
-  async function saveHabitEdit(id: number, data: { name: string; description: string; emoji: string; color: string }) {
-    const updated = await patchHabit(id, { name: data.name, description: data.description });
+  async function saveHabitEdit(id: number, data: { name: string; description: string; emoji: string; color: string; type: 'good' | 'bad' }) {
+    const updated = await patchHabit(id, { name: data.name, description: data.description, type: data.type });
     if (!updated) return;
     saveHabitMeta(id, data.emoji, data.color);
-    setHabits((hs) => hs.map((h) => h.id === id ? { ...h, ...updated, emoji: data.emoji, color: data.color } : h));
+    setHabits((hs) => hs.map((h) => h.id === id ? { ...h, ...updated, emoji: data.emoji, color: data.color, type: data.type } : h));
   }
 
   async function updateHabitReminder(id: number, reminder: Reminder | null) {
@@ -77,14 +77,14 @@ export default function HabitsPage({ dark, onToggleDark }: {
     setHabits((hs) => hs.map((h) => (h.id === id ? { ...h, reminder } : h)));
   }
 
-  async function addHabit(data: { name: string; emoji: string; color: string; reminder: Reminder | null }) {
+  async function addHabit(data: { name: string; emoji: string; color: string; reminder: Reminder | null; type: 'good' | 'bad' }) {
     const res = await authFetch(`${JAVA_API}/api/habits`, {
       method: 'POST',
-      body: JSON.stringify({ name: data.name, description: '', reminder: data.reminder }),
+      body: JSON.stringify({ name: data.name, description: '', reminder: data.reminder, type: data.type }),
     });
     if (!res.ok) return;
     const created: { id: number; name: string } = await res.json();
-    saveHabitMeta(created.id, data.emoji, data.color);
+    saveHabitMeta(created.id, data.emoji, data.color, new Date().toISOString().slice(0, 10));
     await fetchHabits();
   }
 
